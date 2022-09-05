@@ -8,18 +8,49 @@ import numpy as np
 def get_data():
     for r, row in enumerate(all_entries):
         for c, entry in enumerate(row):
-            entry.insert(0)
             text = entry.get()
             demand[r,c] = float(text)
 
     print(demand)
+    obtener_sudokus()
+
+
 
 
 def obtener_sudokus():
-    f = open("sudokus.txt",r)
+    f = open("sudokus.txt","r")
     linea = ""
+    con = 0
+    con2 = 0
+    conSudos = 1
+    listaSudokus = []
+    sudoku = []
     for i in f.readlines():
         linea = i
+        if (i[0:1]!='G'):
+
+            linea_sudoku = list(linea)
+            linea_sudoku.pop(-1)
+            sudoku.insert(con,linea_sudoku)
+            con+=1
+
+
+    for i in range(50):
+        sudoku_separado = []
+        for row in range(9):
+            sudoku_separado.append(sudoku[row + i*9])
+
+        listaSudokus.append(sudoku_separado)
+    print(listaSudokus[1])
+
+
+
+
+
+
+
+
+
 
 
 
