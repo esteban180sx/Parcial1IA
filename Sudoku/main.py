@@ -1,19 +1,43 @@
+
+
+""""
+Sudoku creado por Sebastian David Rendon Soto y Esteban Sanchez Carranza
+
+con referencias de
+
 #Examples https://github.com/dimitri/sudoku/blob/master/sudoku.txt
 #https://stackoverflow.com/questions/71277090/how-can-i-create-a-matrix-from-users-input-in-dialog-box-using-tkinter
 #https://stackoverflow.com/questions/61875723/get-input-values-from-a-grid-with-several-entry-widgets-on-tkinter
 
 
+"""
+
+
 import random
 import numpy as np
 import tkinter as tk
+from tkinter import messagebox
 import logica as lg
+
+
+
+
+
+"""
+Método que verifica la solucion segun los datos ingresados en el sudoku
+"""
+def validar_solucion():
+
+    if   lg.validar_solucion(get_data())==True:
+        tk.messagebox.showinfo("FELICIDADES", "Felicitaciones crack!, solucionaste el sudoku")
+    else:
+        tk.messagebox.showwarning("SIGUE INTENTANDO", "Sigue intentando, se que tu puedes")
 
 
 
 """
 Método que obtiene los datos ingresados en el sudoku
 """
-
 
 def get_data():
 
@@ -24,12 +48,16 @@ def get_data():
 
     l = demand2.tolist()
 
+
+
     return l
 
 
 
 
-
+"""
+Método que escribe un archivo txt con la solucion del sudoku
+"""
 def get_solucion():
 
     lg.resolver_sudoku(get_data())
@@ -38,7 +66,9 @@ def get_solucion():
 
 
 
-
+"""
+Método que lee un archivo con 50 sudokus y los separa en una lista
+"""
 def obtener_sudokus():
 
     f = open("sudokus.txt","r")
@@ -64,6 +94,11 @@ def obtener_sudokus():
 
         listaSudokus.append(sudoku_separado)
 
+
+"""
+Método que lee el archivo de respuesta.txt que contiene la respuesta de un sudoku y lo transforma en listas
+"""
+
 def obtener_sudoku_respuesta():
 
     f = open("respuesta.txt","r")
@@ -82,7 +117,9 @@ def obtener_sudoku_respuesta():
     return sudoku
 
 
-
+"""
+Método que convierte una lista de strings en lista de enteros
+"""
 
 def convertirListaInt(lista):
     for i in range(len(lista)):
@@ -94,13 +131,15 @@ def convertirListaInt(lista):
 
 
 
-
+"""
+Método que dibuja la respuesta de una matrix en la interfaz
+"""
 def pintar_sudoku_respuesta():
 
     get_solucion()
 
     all_entries.clear()
-
+    all_cells.clear()
     sudoku = obtener_sudoku_respuesta()
 
     for r in range(rows):
@@ -140,9 +179,14 @@ def pintar_sudoku_respuesta():
 
 
 
+"""
+Método que dibuja la interfaz del sudoku obteniendo un sudoku aleatorio
+"""
+
 def pintar_sudoku():
 
     all_entries.clear()
+    all_cells.clear()
     numeroSudoku = random.randint(0,49)
     sudoku = listaSudokus[numeroSudoku]
 
@@ -184,7 +228,9 @@ def pintar_sudoku():
 
 # --- main ---
 
-
+"""
+Método principal que dibuja la ventana e invoca la obtencion de sudokus y pintar sudokus que dibuja la interfaz inicial con un sudoku aleatorio
+"""
 if __name__ == '__main__':
     listaSudokus = []
     rows = 9
@@ -197,7 +243,7 @@ if __name__ == '__main__':
     all_entries = []
     all_cells =[]
     pintar_sudoku()
-    b = tk.Button(window, text='Verificar', command=get_data)
+    b = tk.Button(window, text='Verificar', command=validar_solucion)
     xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
     solucionar = tk.Button(window, text='Solucionar sudoku', command=pintar_sudoku_respuesta)
     b.grid(row=rows+1, column=0, columnspan=cols)
