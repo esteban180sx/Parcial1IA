@@ -1,39 +1,45 @@
 import random
 
-import PySimpleGUI as sg
+
 import tkinter as tk
 import numpy as np
 
 #Examples https://github.com/dimitri/sudoku/blob/master/sudoku.txt
 #https://stackoverflow.com/questions/71277090/how-can-i-create-a-matrix-from-users-input-in-dialog-box-using-tkinter
+#https://stackoverflow.com/questions/61875723/get-input-values-from-a-grid-with-several-entry-widgets-on-tkinter
 
 listaSudokus = []
 
 
+
+''''
 def get_data():
     for r in range(rows):
         entries_row = []
-    for c in range(cols):
-        widget = window.grid_slaves(row=r, column=c)[0]
+        for c in range(cols):
 
-        print(widget,widget['text'])
-
-
-
-    ''''
-    for r, row in enumerate(all_entries):
-        for c, entry in enumerate(row):
-            text = entry.get()
-            demand[r,c] = float(text)
-
-
-    print(demand)
+            print(demand[(r,c)].get())
 '''
 
 
 
 
+
+def get_data():
+
+    for r, row in enumerate(all_entries):
+        for c, entry in enumerate(row):
+            text = entry.get()
+            demand2[r,c] = int(text)
+
+    l = demand2.tolist()
+    print(l)
+
+
+
+
 def obtener_sudokus():
+
     f = open("sudokus.txt","r")
     con = 0
 
@@ -57,7 +63,7 @@ def obtener_sudokus():
 
         listaSudokus.append(sudoku_separado)
 
-    print(listaSudokus)
+
 
 
 
@@ -69,17 +75,11 @@ def convertirListaInt(lista):
 
 
 
-
-
-
-
-
-
 def pintar_sudoku():
 
+    all_entries.clear()
     numeroSudoku = random.randint(0,49)
-    sudoku = listaSudokus[0]
-    print(sudoku)
+    sudoku = listaSudokus[numeroSudoku]
 
     for r in range(rows):
         entries_row = []
@@ -91,14 +91,17 @@ def pintar_sudoku():
                 e.insert('end', sudoku[r][c])
                 e.config(state="readonly")
                 e.grid(row=r, column=c)
+                demand[(r, c)]=e
                 entries_row.append(e)
             else:
                 e = tk.Entry(window,width=5)
                 e.insert('end', sudoku[r][c])
                 e.grid(row=r, column=c)
+                demand[(r, c)]=e
                 entries_row.append(e)
 
-    all_entries.append(entries_row)
+        all_entries.append(entries_row)
+
 
 
 
@@ -108,22 +111,23 @@ def pintar_sudoku():
 rows = 9
 cols = 9
 
-demand = np.zeros((rows, cols))
-
+demand = {}
+demand2 = np.zeros((rows, cols))
 window = tk.Tk()
 obtener_sudokus()
 all_entries = []
-
-
+pintar_sudoku()
+''''
 for r in range(rows):
-    entries_row = []
+    #entries_row = []
     for c in range(cols):
         e = tk.Entry(window, width=5)  # 5 chars
         e.insert('end', 0)
         e.grid(row=r, column=c)
-        entries_row.append(e)
-    all_entries.append(entries_row)
-
+        #demand[(r, c)]=e
+        #entries_row.append(e)
+    #all_entries.append(entries_row)
+'''''
 b = tk.Button(window, text='Verificar', command=get_data)
 xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
 b.grid(row=rows+1, column=0, columnspan=cols)
