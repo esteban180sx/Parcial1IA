@@ -1,28 +1,16 @@
-import random
-
-
-import tkinter as tk
-import numpy as np
-
 #Examples https://github.com/dimitri/sudoku/blob/master/sudoku.txt
 #https://stackoverflow.com/questions/71277090/how-can-i-create-a-matrix-from-users-input-in-dialog-box-using-tkinter
 #https://stackoverflow.com/questions/61875723/get-input-values-from-a-grid-with-several-entry-widgets-on-tkinter
 
-listaSudokus = []
+import random
+import numpy as np
+import tkinter as tk
 
 
 
-''''
-def get_data():
-    for r in range(rows):
-        entries_row = []
-        for c in range(cols):
-
-            print(demand[(r,c)].get())
-'''
-
-
-
+"""
+Método que obtiene los datos ingresados en el sudoku
+"""
 
 
 def get_data():
@@ -33,8 +21,8 @@ def get_data():
             demand2[r,c] = int(text)
 
     l = demand2.tolist()
-    print(l)
 
+    print(l)
 
 
 
@@ -75,7 +63,10 @@ def convertirListaInt(lista):
 
 
 
-def pintar_sudoku():
+
+
+
+def pintar_sudoku2():
 
     all_entries.clear()
     numeroSudoku = random.randint(0,49)
@@ -83,6 +74,7 @@ def pintar_sudoku():
 
     for r in range(rows):
         entries_row = []
+        cells_row = []
         for c in range(cols):
 
             if (sudoku[r][c]!=0):
@@ -104,55 +96,78 @@ def pintar_sudoku():
 
 
 
+def pintar_sudoku():
+
+    all_entries.clear()
+    numeroSudoku = random.randint(0,49)
+    sudoku = listaSudokus[numeroSudoku]
+
+    for r in range(rows):
+        entries_row = []
+        cells_row = []
+        for c in range(cols):
+            if ((r in (1-1,2-1,3-1,7-1,8-1,9-1) and c in (4-1,5-1,6-1)) or (r in (4-1,5-1,6-1) and c in (1-1,2-1,3-1,7-1,8-1,9-1))):
+                kleur='black'
+            else:
+                kleur='white'
+
+
+            cell = tk.Frame(window, bg='white', highlightbackground=kleur,
+                         highlightcolor=kleur, highlightthickness=2,
+                         width=50, height=50,  padx=3,  pady=3, background='black')
+
+            if (sudoku[r][c]!=0):
+
+                """
+                e = tk.Entry(window, width=5)  # 5 chars
+                e.insert('end', sudoku[r][c])
+                e.config(state="readonly")
+                e.grid(row=r, column=c)
+                demand[(r, c)]=e
+                entries_row.append(e)
+                """
+
+                cell.grid(row=r, column=c)
+                cells_row.append(cell)
+                e = tk.Entry(cell, width=4, bg='white', highlightthickness=0, fg='black',justify=tk.CENTER)
+                e.insert('end', sudoku[r][c])
+                e.config(state="readonly")
+                e.pack()
+                entries_row.append(e)
+            else:
+                cell.grid(row=r, column=c)
+                cells_row.append(cell)
+                e = tk.Entry(cell, width=4, bg='white', highlightthickness=0, fg='blue',justify=tk.CENTER)
+                e.insert('end', sudoku[r][c])
+                e.pack()
+                entries_row.append(e)
+
+        all_entries.append(entries_row)
+        all_cells.append(cells_row)
 
 
 # --- main ---
 
-rows = 9
-cols = 9
 
-demand = {}
-demand2 = np.zeros((rows, cols))
-window = tk.Tk()
-obtener_sudokus()
-all_entries = []
-pintar_sudoku()
-''''
-for r in range(rows):
-    #entries_row = []
-    for c in range(cols):
-        e = tk.Entry(window, width=5)  # 5 chars
-        e.insert('end', 0)
-        e.grid(row=r, column=c)
-        #demand[(r, c)]=e
-        #entries_row.append(e)
-    #all_entries.append(entries_row)
-'''''
-b = tk.Button(window, text='Verificar', command=get_data)
-xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
-b.grid(row=rows+1, column=0, columnspan=cols)
-xd.grid(row=rows+2, column=0, columnspan=cols)
-window.mainloop()
+if __name__ == '__main__':
+    listaSudokus = []
+    rows = 9
+    cols = 9
+
+    demand = {}
+    demand2 = np.zeros((rows, cols),dtype=int)
+    window = tk.Tk()
+    obtener_sudokus()
+    all_entries = []
+    all_cells =[]
+    pintar_sudoku()
+    b = tk.Button(window, text='Verificar', command=get_data)
+    xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
+    b.grid(row=rows+1, column=0, columnspan=cols)
+    xd.grid(row=rows+2, column=0, columnspan=cols)
+    window.mainloop()
 
 
 
 
 
-
-
-'''Ejemplo ventana''
-layout = [[sg.Text('Pon algo papu'),sg.Input(key='-IN-')],
-          [sg.Text('PEguelo',key='-OUT-')],
-          [sg.Button('OK ni'),sg.Button('CHAO')]]
-
-window = sg.Window('TITULO',layout)
-
-while True:
-    event, values = window.read()
-    if event is None or event == 'CHAO':
-        break
-    window['-OUT-'].update(values['-IN-'])
-
-window.close()
-
-'''''
