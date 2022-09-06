@@ -2,9 +2,11 @@
 #https://stackoverflow.com/questions/71277090/how-can-i-create-a-matrix-from-users-input-in-dialog-box-using-tkinter
 #https://stackoverflow.com/questions/61875723/get-input-values-from-a-grid-with-several-entry-widgets-on-tkinter
 
+
 import random
 import numpy as np
 import tkinter as tk
+import logica as lg
 
 
 
@@ -22,7 +24,18 @@ def get_data():
 
     l = demand2.tolist()
 
-    print(l)
+    return l
+
+
+
+
+
+def get_solucion():
+
+    lg.resolver_sudoku(get_data())
+
+
+
 
 
 
@@ -51,6 +64,22 @@ def obtener_sudokus():
 
         listaSudokus.append(sudoku_separado)
 
+def obtener_sudoku_respuesta():
+
+    f = open("respuesta.txt","r")
+    con = 0
+
+
+    sudoku = []
+    for i in f.readlines():
+        linea = i
+        linea_sudoku = list(linea)
+        linea_sudoku.pop(-1)
+        linea_sudoku=convertirListaInt(linea_sudoku)
+        sudoku.insert(con,linea_sudoku)
+        con+=1
+
+    return sudoku
 
 
 
@@ -66,33 +95,48 @@ def convertirListaInt(lista):
 
 
 
-def pintar_sudoku2():
+def pintar_sudoku_respuesta():
+
+    get_solucion()
 
     all_entries.clear()
-    numeroSudoku = random.randint(0,49)
-    sudoku = listaSudokus[numeroSudoku]
+
+    sudoku = obtener_sudoku_respuesta()
 
     for r in range(rows):
         entries_row = []
         cells_row = []
         for c in range(cols):
+            if ((r in (1-1,2-1,3-1,7-1,8-1,9-1) and c in (4-1,5-1,6-1)) or (r in (4-1,5-1,6-1) and c in (1-1,2-1,3-1,7-1,8-1,9-1))):
+                kleur='black'
+            else:
+                kleur='white'
+
+
+            cell = tk.Frame(window, bg='white', highlightbackground=kleur,
+                            highlightcolor=kleur, highlightthickness=2,
+                            width=50, height=50,  padx=3,  pady=3, background='black')
 
             if (sudoku[r][c]!=0):
 
-                e = tk.Entry(window, width=5)  # 5 chars
+
+                cell.grid(row=r, column=c)
+                cells_row.append(cell)
+                e = tk.Entry(cell, width=4, bg='white', highlightthickness=0, fg='black',justify=tk.CENTER)
                 e.insert('end', sudoku[r][c])
                 e.config(state="readonly")
-                e.grid(row=r, column=c)
-                demand[(r, c)]=e
+                e.pack()
                 entries_row.append(e)
             else:
-                e = tk.Entry(window,width=5)
+                cell.grid(row=r, column=c)
+                cells_row.append(cell)
+                e = tk.Entry(cell, width=4, bg='white', highlightthickness=0, fg='blue',justify=tk.CENTER)
                 e.insert('end', sudoku[r][c])
-                e.grid(row=r, column=c)
-                demand[(r, c)]=e
+                e.pack()
                 entries_row.append(e)
 
         all_entries.append(entries_row)
+        all_cells.append(cells_row)
 
 
 
@@ -118,14 +162,6 @@ def pintar_sudoku():
 
             if (sudoku[r][c]!=0):
 
-                """
-                e = tk.Entry(window, width=5)  # 5 chars
-                e.insert('end', sudoku[r][c])
-                e.config(state="readonly")
-                e.grid(row=r, column=c)
-                demand[(r, c)]=e
-                entries_row.append(e)
-                """
 
                 cell.grid(row=r, column=c)
                 cells_row.append(cell)
@@ -163,8 +199,10 @@ if __name__ == '__main__':
     pintar_sudoku()
     b = tk.Button(window, text='Verificar', command=get_data)
     xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
+    solucionar = tk.Button(window, text='Solucionar sudoku', command=pintar_sudoku_respuesta)
     b.grid(row=rows+1, column=0, columnspan=cols)
     xd.grid(row=rows+2, column=0, columnspan=cols)
+    solucionar.grid(row=rows+3, column=0, columnspan=cols)
     window.mainloop()
 
 
