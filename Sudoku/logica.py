@@ -11,6 +11,14 @@ sudoku = [
 ]
 
 def resolver_sudoku(sudoku):
+    """Resuelve el ejercicio del sudoku y al final escribe la solución en un archivo
+
+    Parameters
+    ----------
+    sudoku: list[list]
+        Matriz de números con la informacíon del sudoku
+
+    """
     for i in range(9):
         for j in range(9):
             if sudoku[i][j] == 0:
@@ -25,6 +33,28 @@ def resolver_sudoku(sudoku):
     return
 
 def es_permitido(i, j, valor, sudoku):
+    """Revisa dentro del sudoku si es posible poner el número valor en la
+    posición i, j dentro de la matriz
+
+    Parameters
+    ----------
+
+    i: number
+        Posición vertical dentro del parametro sudoku
+    j: number
+        Posición horizontal dentro del parametro sudoku
+    valor: number
+        Valor del numero que va a ser insertado en la posición i, j
+    sudoku: list[list]
+        Tablero de juego del sudoku
+
+    Return
+    ------
+    boolean
+        Al revisar la posición y confirmar si la posición es valida para el
+        valor devolvera true
+
+    """
     if valor in sudoku[i]:
         return False
 
@@ -41,6 +71,23 @@ def es_permitido(i, j, valor, sudoku):
 
 
 def to_subgrid(i, j, sudoku):
+    """Devuelve una sub cuadricula de 3x3 del sudoku a la cual pertenece la posición i, j
+
+    Parameters
+    ----------
+    i: number
+        posición vertical del cuadro seleccionado del sudoku
+    j: number
+        Posición horizontal del cuadro seleccionado del sudoku
+    sudoku: list
+        Tablero del sudoku con los numeros ingresados
+
+    Returns
+    -------
+    list
+        Contiene los numeros dentro de la cuadricula 3x3
+
+    """
     sub_fila = subgrid_pos(i)
     sub_col = subgrid_pos(j)
 
@@ -54,6 +101,20 @@ def to_subgrid(i, j, sudoku):
     return sub_grid
 
 def subgrid_pos(pos):
+    """Devuelve la posición relativa a la cuadricula 3x3 dependiendo del numero
+    en pos
+
+    Parameters
+    ----------
+    pos: number
+        Posición no importa la orientación y devuelve la grid 3x3 a la que
+        pertenece el valor
+
+    Returns
+    -------
+    number
+        Posición subgrid.
+    """
     if pos < 3:
         return 0
     elif pos < 6:
@@ -62,9 +123,33 @@ def subgrid_pos(pos):
         return 2
 
 def validar_solucion(sudoku):
+    """Valida si el sudoku ingresado es valido.
+
+    Parameters
+    ----------
+    sudoku: list
+        Lista con 9 listas dentro con 9 posiciones para simular un sudoku.
+
+    Returns
+    -------
+    boolean
+        True si la solución es valida.
+
+    """
     return validar_columnas(sudoku) and validar_filas(sudoku) and validar_subgrids(sudoku)
 
 def validar_subgrids(sudoku):
+    """Valida las 9 sub grid 3x3 dentro del sudoku si están llenadas correctamente.
+
+    Parameters
+    ----------
+    sudoku: list
+        Lista con 9 listas dentro con 9 posiciones para simular un sudoku
+
+    Returns
+    boolean
+        True si las subgrid son validas.
+    """
     subgrids = [0, 3, 6]
     for i in subgrids:
         for j in subgrids:
@@ -76,6 +161,17 @@ def validar_subgrids(sudoku):
     return True
 
 def validar_columnas(sudoku):
+    """Validas las columnas del sudoku que estén llenadas correctamente.
+
+    Parameters
+    ----------
+    sudoku: list
+        Lista con 9 listas dentro con 9 posiciones para simular un sudoku
+
+    Returns
+    boolean
+        True si las columnas son validas.
+    """
     for i in range(9):
         for j in range(1, 10):
             if not j in [fila[i] for fila in sudoku]:
@@ -84,6 +180,18 @@ def validar_columnas(sudoku):
     return True
 
 def validar_filas(sudoku):
+    """Validas las filas del sudoku que sean validas para la solución
+
+    Parameters
+    ----------
+    sudoku: list
+        Lista con 9 listas dentro con 9 posiciones para simular un sudoku
+
+    Returns
+    -------
+    boolean
+        True si las filas son validas.
+    """
     for i in range(9):
         for j in range(1,10):
             if not j in sudoku[i]:
@@ -92,6 +200,18 @@ def validar_filas(sudoku):
     return True
 
 def string_sudoku(sudoku):
+    """Convierte un sudoku a cadena
+    
+    Parameters
+    ----------
+    sudoku:list
+        Lista con 9 listas dentro con 9 posiciones
+
+    Returns
+    -------
+    string
+        Cadena con la información del sudoku
+    """
     cadena = ""
     for i in sudoku:
         for j in i:
@@ -101,6 +221,13 @@ def string_sudoku(sudoku):
     return cadena
 
 def escribir_sudoku_archivo(sudoku):
+    """Escribe un sudoku en un archivo txt
+    
+    Parameters
+    ----------
+    sudoku:list
+        Lista con 9 listas dentro con 9 posiciones
+    """
     file = open("respuesta.txt", "w")
     file.write(string_sudoku(sudoku))
     file.close()
