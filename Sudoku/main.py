@@ -8,6 +8,7 @@ con referencias de
 #Examples https://github.com/dimitri/sudoku/blob/master/sudoku.txt
 #https://stackoverflow.com/questions/71277090/how-can-i-create-a-matrix-from-users-input-in-dialog-box-using-tkinter
 #https://stackoverflow.com/questions/61875723/get-input-values-from-a-grid-with-several-entry-widgets-on-tkinter
+# https://www.youtube.com/watch?v=KWP90gAsOa8
 
 
 """
@@ -24,14 +25,17 @@ import logica as lg
 
 
 """
-Método que verifica la solucion segun los datos ingresados en el sudoku
+Método que verifica la solucion segun los datos 
+ingresados en el sudoku
 """
 def validar_solucion():
 
     if   lg.validar_solucion(get_data())==True:
-        tk.messagebox.showinfo("FELICIDADES", "Felicitaciones crack!, solucionaste el sudoku")
+        tk.messagebox.showinfo("FELICIDADES",
+        "Felicitaciones crack!, solucionaste el sudoku")
     else:
-        tk.messagebox.showwarning("SIGUE INTENTANDO", "Sigue intentando, se que tu puedes")
+        tk.messagebox.showwarning("SIGUE INTENTANDO",
+        "Sigue intentando, se que tu puedes")
 
 
 
@@ -118,7 +122,8 @@ def obtener_sudoku_respuesta():
 
 
 """
-Método que convierte una lista de strings en lista de enteros
+Método que convierte una lista de 
+strings en lista de enteros
 """
 
 def convertirListaInt(lista):
@@ -236,7 +241,7 @@ if __name__ == '__main__':
     rows = 9
     cols = 9
 
-    demand = {}
+
     demand2 = np.zeros((rows, cols),dtype=int)
     window = tk.Tk()
     obtener_sudokus()
@@ -244,10 +249,10 @@ if __name__ == '__main__':
     all_cells =[]
     pintar_sudoku()
     b = tk.Button(window, text='Verificar', command=validar_solucion)
-    xd = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
+    obtener = tk.Button(window, text='Obtener sudoku', command=pintar_sudoku)
     solucionar = tk.Button(window, text='Solucionar sudoku', command=pintar_sudoku_respuesta)
     b.grid(row=rows+1, column=0, columnspan=cols)
-    xd.grid(row=rows+2, column=0, columnspan=cols)
+    obtener.grid(row=rows+2, column=0, columnspan=cols)
     solucionar.grid(row=rows+3, column=0, columnspan=cols)
     window.mainloop()
 
